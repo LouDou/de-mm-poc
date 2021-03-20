@@ -29,9 +29,7 @@ class AutoBatchWrite extends DE.BatchWriteRequest {
 
     for (const model of models) {
       const meta = Reflect.getMetadata('sc-reflect:model', model.constructor);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const item = { PutRequest: { Item: DE.toDb(model, model.constructor) } };
+      const item = { PutRequest: { Item: DE.toDb(model) } };
       const tableName = meta.tableName;
       this.params.RequestItems[tableName] =
         this.params.RequestItems[tableName] || [];
