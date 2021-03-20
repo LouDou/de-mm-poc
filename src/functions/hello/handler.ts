@@ -44,11 +44,8 @@ class AutoBatchWrite extends DE.BatchWriteRequest {
 
 const ddb = new AWS.DynamoDB({ endpoint: 'http://localhost:8000' });
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface ModelType {}
-
 @DE.Model({ tableName: 'test-a' })
-class ModelA implements ModelType {
+class ModelA {
   @DE.PartitionKey()
   public id: string;
 
@@ -62,7 +59,7 @@ class ModelA implements ModelType {
 }
 
 @DE.Model({ tableName: 'test-b' })
-class ModelB implements ModelType {
+class ModelB {
   @DE.PartitionKey()
   public id: string;
 
@@ -76,7 +73,7 @@ class ModelB implements ModelType {
 }
 
 const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async () => {
-  const models: ModelType[] = [];
+  const models = [];
 
   for (let i = 0; i < 200; ++i) {
     if (Math.random() < 0.5) {
