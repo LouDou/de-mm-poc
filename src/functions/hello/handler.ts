@@ -78,21 +78,17 @@ class ModelB implements ModelType {
 const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async () => {
   const models: ModelType[] = [];
 
-  for (let i = 0; i < 100; ++i) {
-    const k = Math.random().toString(16);
-    const name = `name-${k}`;
-    models.push(new ModelA(k, name));
+  for (let i = 0; i < 200; ++i) {
+    if (Math.random() < 0.5) {
+      const k = Math.random().toString(16);
+      const name = `name-${k}`;
+      models.push(new ModelA(k, name));
+    } else {
+      const k = Math.random().toString(16);
+      const value = Math.random() * 1000;
+      models.push(new ModelB(k, value));
+    }
   }
-
-  for (let i = 0; i < 100; ++i) {
-    const k = Math.random().toString(16);
-    const value = Math.random() * 1000;
-    models.push(new ModelB(k, value));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  models.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   const resp: Promise<AWS.DynamoDB.BatchWriteItemOutput>[] = [];
 
